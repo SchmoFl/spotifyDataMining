@@ -3,6 +3,9 @@ library(dplyr)
 library(mlr)
 library(ggplot2)
 
+
+# BIG vs Pac --------------------------------------------------------------
+
 pacArtists <- get_artists('2Pac')
 pacAlbums <- get_artist_albums(pacArtists$artist_uri[1])
 allEyesTracks <- get_album_tracks(pacAlbums[2,])
@@ -50,11 +53,28 @@ lifeAfterData %>% summarize(danceability = mean(danceability),
 
 get_related_artists("2Pac")
 
+ninetiesTracks <- get_playlist_audio_features(username = "spotify",playlist_uris = "37i9dQZF1DX186v583rmzp")
 
 #get_user_playlists("1138453506")
 
+ninetiesArtists <- ninetiesTracks %>% pull(artist_name) %>% unique() %T>% print() 
 
-get_genre_artists("Rap")
+modelArtists <- c("The Notorious B.I.G.", "Dr. Dre", "2Pac", "Warren G", "Snoop Dogg", "Wu-Tang Clan", "Cypress Hill", "Method Man",
+                  "Westside Connection", "Mos Def", "Eminem", "Busta Rhymes", "Bone Thugs-N-Harmony")
+
+trainData <- get_artist_audio_features(modelArtists[1])
+# for(art in modelArtists[-1]){
+#   print(art)
+#   trainData %<>% rbind(get_artist_audio_features(art))
+# }
+# trainData %<>% filter(artist_name %in% modelArtists)
+# trainData %<>% filter(!is_collaboration)
+# trainData %<>% mutate(d = as.numeric(sapply(str_split(album_release_date, "-"), function(x) x[1]))) %>% filter(d < 2000) %>% select(-d)
+
+nowPlaylist <- get_playlist_audio_features(username = "spotify", playlist_uris = "37i9dQZF1DX0XUsuxWHRQd") 
+nowArtists <- nowPlaylist %>% pull(artist_name) %>% unique() %T>% print
+
+# kanye west timeline -----------------------------------------------------
 
 
 kanyeAudio <- get_artist_audio_features("5K4W6rqBFWDnAN6FQUkS6x")
